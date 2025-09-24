@@ -7,9 +7,9 @@ HEBREW_MONTHS = {
     "כסלו": 9,
     "טבת": 10,
     "שבט": 11,
-    "אדר": 12,       # In non-leap years
-    "אדר א": 12, "אדר א'": 12, "אדר ראשון": 12,
-    "אדר ב": 13, "אדר ב'": 13, "אדר שני": 13,
+    "אדר": 12,            # non-leap year
+    "אדרא’": 12, "אדרא": 12, "אדרראשון": 12,  # Adar I variations
+    "אדרב’": 13, "אדרב": 13, "אדרשני": 13,    # Adar II variations
     "ניסן": 1,
     "אייר": 2,
     "סיון": 3, "סיוון": 3,
@@ -89,6 +89,18 @@ def hebrew_year_to_num(year_text: str) -> int:
         val += 5000
     return val
 
+def normalize_hebrew_month(text: str) -> str:
+    """
+    Normalize Hebrew month text:
+    - remove quotes and spaces
+    - unify straight and curly apostrophes
+    """
+    text = text.strip()
+    text = text.replace('"', '')        # remove double quotes
+    text = text.replace("'", "’")       # unify apostrophes
+    text = text.replace(" ", "")        # remove spaces
+    return text
+
 def parse_hebrew_date(day_text: str, month_text: str, year_text: str):
     """
     Convert Hebrew textual date into (year, month, day).
@@ -97,12 +109,12 @@ def parse_hebrew_date(day_text: str, month_text: str, year_text: str):
     day = hebrew_gematria_to_num(day_text)
     year = hebrew_year_to_num(year_text)
     
-    # Normalize month name
-    month_text = month_text.replace("באדר", "אדר").replace(" ", "")
+    month_text = normalize_hebrew_month(month_text)
+
     if month_text in HEBREW_MONTHS:
         month = HEBREW_MONTHS[month_text]
     else:
+        print(f"Unknown month: {month_text}")
         raise ValueError(f"Unknown month: {month_text}")
 
     return year, month, day
-
