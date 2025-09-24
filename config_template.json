@@ -1,0 +1,25 @@
+{
+  "google_calendar": {
+    "credentials_file": "credentials.json",
+    "token_file": "token.json"
+  },
+  "hebrew_birthdays": [
+    {
+      "name": "Example Person 1",
+      "hebrew_day": 15,
+      "hebrew_month": 7,
+      "notes": "Hebrew months: Tishrei=1, Cheshvan=2, Kislev=3, Tevet=4, Shvat=5, Adar=6, Nisan=7, Iyar=8, Sivan=9, Tammuz=10, Av=11, Elul=12"
+    },
+    {
+      "name": "Example Person 2", 
+      "hebrew_day": 5,
+      "hebrew_month": 1,
+      "notes": "Add more birthday entries as needed"
+    }
+  ],
+  "settings": {
+    "years_ahead": 5,
+    "start_year": null,
+    "log_level": "INFO"
+  }
+}
