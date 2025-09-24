@@ -29,7 +29,6 @@ def main():
             event_date = f"{gregorian_year:04d}-{gregorian_month:02d}-{gregorian_day:02d}"
 
             age = gregorian_year - convert_heb_year_to_gregorian(heb_year=hebrew_year, heb_month=hebrew_month, heb_day=hebrew_day)
-            print(f"{gregorian_date} and age: {age} and the converted heb year is: {convert_heb_year_to_gregorian(heb_year=hebrew_year, heb_month=hebrew_month, heb_day=hebrew_day)}")
 
             # Add full-day event to the calendar
             add_full_day_event(
