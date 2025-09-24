@@ -51,3 +51,18 @@ def create_calendar(service, calendar_name="Hebrew Birthdays Calendar", timezone
   print(f"Created calendar with ID: {created_calendar['id']}")
   return created_calendar["id"]
 
+
+def add_event(service, calendar_id, summary, event_date, description="", location=""):
+    """
+    event_date should be a string in 'YYYY-MM-DD' format
+    """
+    event = {
+        "summary": summary,
+        "description": description,
+        "location": location,
+        "start": {"date": event_date},  # full-day start
+        "end": {"date": event_date},    # full-day end (exclusive)
+    }
+
+    event = service.events().insert(calendarId=calendar_id, body=event).execute()
+    print(f"Event created: {event.get('htmlLink')}")
