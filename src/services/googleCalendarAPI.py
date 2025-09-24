@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def genrate_service_client():
+def genrate_service_client(credentials_path="../../credentials.json"):
 
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
@@ -25,7 +25,7 @@ def genrate_service_client():
       creds.refresh(Request())
     else:
       flow = InstalledAppFlow.from_client_secrets_file(
-          "../../credentials.json", SCOPES
+          credentials_path, SCOPES
       )
       creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
@@ -52,7 +52,7 @@ def create_calendar(service, calendar_name="Hebrew Birthdays Calendar", timezone
   return created_calendar["id"]
 
 
-def add_event(service, calendar_id, summary, event_date, description="", location=""):
+def add_full_day_event(service, calendar_id, summary, event_date, description="", location=""):
     """
     event_date should be a string in 'YYYY-MM-DD' format
     """
@@ -66,3 +66,5 @@ def add_event(service, calendar_id, summary, event_date, description="", locatio
 
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     print(f"Event created: {event.get('htmlLink')}")
+    
+    
