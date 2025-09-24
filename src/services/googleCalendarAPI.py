@@ -8,13 +8,11 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
 def genrate_service_client():
-  """Shows basic usage of the Google Calendar API.
-  Prints the start and name of the next 10 events on the user's calendar.
-  """
+
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
@@ -40,3 +38,16 @@ def genrate_service_client():
 
   except HttpError as error:
     print(f"An error occurred: {error}")
+
+
+def create_calendar(service, calendar_name="Hebrew Birthdays Calendar", timezone="Asia/Jerusalem"):
+  # Create a new calendar
+  calendar = {
+      "summary": calendar_name,
+      "timeZone": timezone
+  }
+
+  created_calendar = service.calendars().insert(body=calendar).execute()
+  print(f"Created calendar with ID: {created_calendar['id']}")
+  return created_calendar["id"]
+
