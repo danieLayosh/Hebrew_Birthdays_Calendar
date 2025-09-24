@@ -41,15 +41,27 @@ def genrate_service_client(credentials_path="../../credentials.json"):
 
 
 def create_calendar(service, calendar_name="Hebrew Birthdays Calendar", timezone="Asia/Jerusalem"):
-  # Create a new calendar
-  calendar = {
-      "summary": calendar_name,
-      "timeZone": timezone
-  }
+    # Step 1: List all existing calendars
+    page_token = None
+    while True:
+        calendar_list = service.calendarList().list(pageToken=page_token).execute()
+        for cal in calendar_list.get("items", []):
+            if cal.get("summary") == calendar_name:
+                print(f"Calendar already exists: {cal['id']}")
+                return cal["id"]  # Return existing calendar ID
+        page_token = calendar_list.get("nextPageToken")
+        if not page_token:
+            break
 
-  created_calendar = service.calendars().insert(body=calendar).execute()
-  print(f"Created calendar with ID: {created_calendar['id']}")
-  return created_calendar["id"]
+    # Step 2: Create a new calendar if it doesn't exist
+    calendar = {
+        "summary": calendar_name,
+        "timeZone": timezone
+    }
+    created_calendar = service.calendars().insert(body=calendar).execute()
+    print(f"Created calendar with ID: {created_calendar['id']}")
+    return created_calendar["id"]
+
 
 
 def add_full_day_event(service, calendar_id, summary, event_date, description="", location=""):
