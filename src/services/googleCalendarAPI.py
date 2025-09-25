@@ -74,6 +74,7 @@ def add_full_day_event(service, calendar_id, summary, event_date, description=""
         "location": location,
         "start": {"date": event_date},
         "end": {"date": event_date},
+        "colorId": "5"
     }
 
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
