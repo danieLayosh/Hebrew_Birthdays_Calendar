@@ -210,3 +210,4 @@ __marimo__/
 # Google apis credentials
 credentials.json
 token.json
+src/data/*
