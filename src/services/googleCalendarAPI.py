@@ -1,5 +1,6 @@
 import datetime
 import os.path
+import time
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -40,28 +41,27 @@ def genrate_service_client(credentials_path="../../credentials.json"):
     print(f"An error occurred: {error}")
 
 
-def create_calendar(service, calendar_name="Hebrew Birthdays Calendar", timezone="Asia/Jerusalem"):
-    # Step 1: List all existing calendars
+def create_calendar(service, calendar_name="Hebrew Birthdays Calendar test", timezone="Asia/Jerusalem"):
+    """
+    Create a new calendar if it doesn't exist, return its ID.
+    """
+    # Step 1: Look for existing calendar
     page_token = None
     while True:
         calendar_list = service.calendarList().list(pageToken=page_token).execute()
         for cal in calendar_list.get("items", []):
             if cal.get("summary") == calendar_name:
                 print(f"Calendar already exists: {cal['id']}")
-                return cal["id"]  # Return existing calendar ID
+                return cal["id"]
         page_token = calendar_list.get("nextPageToken")
         if not page_token:
             break
 
-    # Step 2: Create a new calendar if it doesn't exist
-    calendar = {
-        "summary": calendar_name,
-        "timeZone": timezone
-    }
+    # Step 2: Create new calendar
+    calendar = {"summary": calendar_name, "timeZone": timezone}
     created_calendar = service.calendars().insert(body=calendar).execute()
     print(f"Created calendar with ID: {created_calendar['id']}")
     return created_calendar["id"]
-
 
 
 def add_full_day_event(service, calendar_id, summary, event_date, description="", location=""):
@@ -80,4 +80,18 @@ def add_full_day_event(service, calendar_id, summary, event_date, description=""
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     print(f"Event created: {event.get('htmlLink')}")
     
-    
+  
+def share_calendar_with_user(service, calendar_id, user_email, role="writer"):
+    """
+    Share the calendar with another user (default: writer).
+    Valid roles: 'reader', 'writer', 'freeBusyReader'
+    """
+    try:
+        rule = {
+            "scope": {"type": "user", "value": user_email},
+            "role": role,
+        }
+        service.acl().insert(calendarId=calendar_id, body=rule).execute()
+        print(f"Shared calendar {calendar_id} with {user_email} as {role}")
+    except Exception as e:
+        print(f"Failed to share calendar: {e}")
