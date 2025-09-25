@@ -1,4 +1,4 @@
-from dateConvertionLogic import hebrew_gematria_to_num, hebrew_year_to_num, parse_hebrew_date
+from services.dateConvertionLogic import parse_hebrew_date
 import csv
 
 def normalize_hebrew_text(text):
@@ -21,8 +21,6 @@ def read_birthdays_from_csv(file_path):
             year_text = row['שנה'].strip().replace('"', '')
             name_text = row['שם'].strip().replace('"', '')
 
-            print(f"{day_text=} {month_text=} {year_text=} {name_text=}")
-
             year, month, day = parse_hebrew_date(
                 day_text=day_text,
                 month_text=month_text,
@@ -30,7 +28,3 @@ def read_birthdays_from_csv(file_path):
             )
             birthdays.append((year, month, day, name_text))
     return birthdays
-
-
-lista = read_birthdays_from_csv('src/services/birthdays.csv') 
-print(lista)
