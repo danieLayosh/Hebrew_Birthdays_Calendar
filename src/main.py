@@ -2,6 +2,10 @@ import os
 from dotenv import load_dotenv
 from services.googleCalendarAPI import genrate_service_client, create_calendar, add_full_day_event
 from services.dateConvertionLogic import convert_hebrew_to_gregorian, convert_heb_year_to_gregorian
+from services.csv_functions import read_birthdays_from_csv
+
+# for rate limiting
+import time
 
 # Load variables from .env
 load_dotenv()
@@ -15,9 +19,7 @@ def main():
     service = genrate_service_client(credentials_path=CREDENTIALS_PATH)
     calendar_id = create_calendar(service)
     
-    birthday_list = [
-        (5765, 12, 29, "Daniel Layosh")
-    ]
+    birthday_list = read_birthdays_from_csv("D:/Users/daniel/Documents/Daniel/My_projects/coding/Hebrew_Birthdays_Calendar/src/data/birthdays.csv")
     
     for hebrew_year, hebrew_month, hebrew_day, name in birthday_list:
         for i in range(0, 100):
@@ -38,6 +40,7 @@ def main():
                 event_date=event_date,
                 description=f"{age} Birthday of {name}",
             )
+            time.sleep(0.1)  # Sleep for 100 milliseconds to avoid hitting rate limits
 
 
 if __name__ == "__main__":
