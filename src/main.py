@@ -11,15 +11,15 @@ import time
 load_dotenv()
 
 CREDENTIALS_PATH = os.getenv("CREDENTIALS_PATH")
+BIRTHDAY_CSV_PATH = os.getenv("BIRTHDAY_CSV_PATH")
 
 def main():
     print("Starting the script...")
-    # Add your main logic here
     
     service = genrate_service_client(credentials_path=CREDENTIALS_PATH)
     calendar_id = create_calendar(service)
     
-    birthday_list = read_birthdays_from_csv("./src/data/birthdays2.csv")
+    birthday_list = read_birthdays_from_csv(BIRTHDAY_CSV_PATH)
     
     for hebrew_year, hebrew_month, hebrew_day, name in birthday_list:
         for i in range(0, 100):
