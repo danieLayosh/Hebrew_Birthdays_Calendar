@@ -19,7 +19,7 @@ def main():
     service = genrate_service_client(credentials_path=CREDENTIALS_PATH)
     calendar_id = create_calendar(service)
     
-    birthday_list = read_birthdays_from_csv("D:/Users/daniel/Documents/Daniel/My_projects/coding/Hebrew_Birthdays_Calendar/src/data/birthdays.csv")
+    birthday_list = read_birthdays_from_csv("./src/data/birthdays2.csv")
     
     for hebrew_year, hebrew_month, hebrew_day, name in birthday_list:
         for i in range(0, 100):
